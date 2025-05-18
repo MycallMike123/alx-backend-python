@@ -20,16 +20,18 @@ def stream_users_in_batches(batch_size):
         cursor.execute("SELECT * FROM user_data")
 
         batch = []
-        for row in cursor:  # 1st loop
+        for row in cursor:  # Loop over rows one by one
             batch.append(row)
             if len(batch) == batch_size:
                 yield batch
                 batch = []
-        if batch:  # yield remaining rows if any
+
+        if batch:
             yield batch
 
         cursor.close()
         connection.close()
+
     except Error as e:
         print(f"Error fetching batches: {e}")
 
