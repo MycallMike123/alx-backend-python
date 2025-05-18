@@ -16,7 +16,7 @@ def connect_db():
         return mysql.connector.connect(
                 host="localhost",
                 user="root",
-                password="my_mysql_password"
+                password="rootpass"
              )
 
     except Error as e:
@@ -40,7 +40,7 @@ def connect_to_prodev():
         return mysql.connector.connect(
             host="localhost",
             user="root",
-            password="my_mysql_password",
+            password="rootpass",
             database="ALX_prodev"
         )
     except Error as e:
