@@ -52,3 +52,5 @@ def batch_processing(batch_size):
         ]
         for user_dict in filtered:
             print(user_dict)
+    return None
+
