@@ -9,7 +9,7 @@ class DatabaseConnection:
         self.conn = None # Hold the connection object once created
 
 
-    def __enter(self):
+    def __enter__(self):
         #Open a connection with the sqlite3 database
         self.conn = sqlite3.connect(self.db_name)
         return self.conn # return the connection object for use
