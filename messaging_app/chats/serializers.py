@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import CustomUser, Conversation, Message
-from rest_framework.exceptions import ValidationError
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -24,7 +23,7 @@ class MessageSerializer(serializers.ModelSerializer):
     def validate_message_body(self, value):
         """Raise error if message body is empty."""
         if not value.strip():
-            raise ValidationError("Message body cannot be empty.")
+            raise serializers.ValidationError("Message body cannot be empty.")  # ✅ Correct usage
         return value
 
 
