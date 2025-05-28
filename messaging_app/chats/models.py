@@ -3,6 +3,7 @@
 Models for custom User, Conversation, and Message in messaging_app.
 """
 
+import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
@@ -10,8 +11,15 @@ from django.conf import settings
 
 class CustomUser(AbstractUser):
     """Extends Django's default user model with future customization placeholders."""
-    # Add extra fields here if needed in the future
-    pass
+    user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15, blank=True)
+
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone_number']
+    USERNAME_FIELD = 'email'
+
+    def __str__(self):
+        return self.email
 
 
 class Conversation(models.Model):
