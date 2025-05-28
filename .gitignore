@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.DS_Store
+
+# Django
+db.sqlite3
+*.mo
+
+# Virtualenv
+venv/
+ENV/
+env/
+.venv/
+
+# VS Code
+.vscode/
+
+# Pytest
+.pytest_cache/
+
+# Migrations (optional - if you want to reset frequently)
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# MyPy
+.mypy_cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# Environment files
+.env
+.env.*
+
+# IDEs
+.idea/
+*.swp
+
