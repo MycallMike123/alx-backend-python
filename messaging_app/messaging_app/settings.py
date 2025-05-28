@@ -52,6 +52,7 @@ REST_FRAMEWORK = {
 
 LOGIN_URL = '/admin/login/'
 
+AUTH_USER_MODEL = 'chats.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
