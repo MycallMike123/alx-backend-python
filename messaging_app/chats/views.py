@@ -4,7 +4,6 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Conversation, Message, CustomUser
 from .serializers import ConversationSerializer, MessageSerializer
 
-
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
