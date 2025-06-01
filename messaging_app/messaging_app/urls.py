@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('chats.urls')),  # Include the chats API URLs under /api/
+    path('api/', include('messaging_app.chats.urls')),
 ]
