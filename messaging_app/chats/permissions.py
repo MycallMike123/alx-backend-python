@@ -1,8 +1,13 @@
-from rest_framework.permissions import BasePermission
+from rest_framework import permissions
 
-class IsOwner(BasePermission):
+class IsOwner(permissions.BasePermission):
     """
-    Custom permission to only allow users to access their own conversations or messages.
+    Custom permission to ensure users only access their own messages/conversations.
     """
+
     def has_object_permission(self, request, view, obj):
-        return obj.user == request.user or obj.sender == request.user or obj.receiver == request.user
+        return (
+            getattr(obj, 'user', None) == request.user or
+            getattr(obj, 'sender', None) == request.user or
+            getattr(obj, 'receiver', None) == request.user
+        )
