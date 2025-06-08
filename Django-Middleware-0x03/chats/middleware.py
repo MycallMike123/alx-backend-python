@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import time, datetime, timedelta
 from django.http import HttpResponseForbidden
 from collections import defaultdict
 from django.http import HttpResponseForbidden
