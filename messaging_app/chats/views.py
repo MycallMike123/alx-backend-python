@@ -4,6 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Conversation, Message, CustomUser
 from .serializers import ConversationSerializer, MessageSerializer
 from .permissions import IsParticipantOfConversation
+from .pagination import MessagePagination
+from .filters import MessageFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
@@ -35,6 +38,9 @@ class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = MessagePagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = MessageFilter
 
     def create(self, request, *args, **kwargs):
         conversation_id = request.data.get('conversation')
@@ -67,6 +73,5 @@ class MessageViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        return Message.objects.filter(
-            sender=self.request.user
-        ) | Message.objects.filter(receiver=self.request.user)
+        user = self.request.user
+        return Message.objects.filter(sender=user) | Message.objects.filter(receiver=user)
