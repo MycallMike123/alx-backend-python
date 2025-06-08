@@ -2,6 +2,7 @@ import logging
 from datetime import datetime, timedelta
 from django.http import HttpResponseForbidden
 from collections import defaultdict
+from django.http import HttpResponseForbidden
 
 
 class RequestLoggingMiddleware:
@@ -74,3 +75,22 @@ class OffensiveLanguageMiddleware:
         else:
             ip = request.META.get('REMOTE_ADDR')
         return ip
+
+
+class RolePermissionMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        user = request.user
+
+        # Ensure user is authenticated
+        if user.is_authenticated:
+            # Check role-based permissions
+            user_role = getattr(user, 'role', None)  # Assume a 'role' attribute exists on the user model
+            if user_role not in ['admin', 'moderator']:
+                return HttpResponseForbidden("Access denied: insufficient permissions.")
+        else:
+            return HttpResponseForbidden("Access denied: user not authenticated.")
+
+        return self.get_response(request)
