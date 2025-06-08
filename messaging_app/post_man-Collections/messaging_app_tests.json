@@ -1,0 +1,19 @@
+{
+  "username": "testuser",
+  "password": "testpass"
+}
+
+{
+  "access_token": "your_jwt_token"
+}
+
+
+{
+  "participants": ["user1", "user2"]
+}
+
+
+{
+  "message": "Hello, this is a test message."
+}
+
