@@ -8,7 +8,7 @@ from .permissions import IsParticipantOfConversation
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
-    permission_classes = [IsAuthenticated, IsParticipantOfConversation]
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         participant_ids = request.data.get('participant_ids', [])
@@ -34,7 +34,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
-    permission_classes = [IsAuthenticated, IsParticipantOfConversation]
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         conversation_id = request.data.get('conversation')

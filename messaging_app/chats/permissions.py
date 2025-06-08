@@ -9,13 +9,21 @@ class IsParticipantOfConversation(permissions.BasePermission):
     with sender and receiver or participants.
     """
 
+    def has_permission(self, request, view):
+        # Must be authenticated for all methods
+        return request.user and request.user.is_authenticated
+
     def has_object_permission(self, request, view, obj):
         user = request.user
-        # Check if user is part of the conversation/message
-        return (
-            hasattr(obj, "participants") and user in obj.participants.all()
-        ) or (
-            hasattr(obj, "sender") and obj.sender == user
-        ) or (
-            hasattr(obj, "receiver") and obj.receiver == user
-        )
+        # Allow access only if user is part of the conversation
+        is_participant = False
+
+        if hasattr(obj, "participants"):
+            is_participant = user in obj.participants.all()
+        elif hasattr(obj, "sender") and hasattr(obj, "receiver"):
+            is_participant = user == obj.sender or user == obj.receiver
+
+        if request.method in ["GET", "POST", "PUT", "PATCH", "DELETE"]:
+            return is_participant
+
+        return False
