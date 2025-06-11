@@ -15,21 +15,28 @@ def delete_user(request):
 
 @login_required
 def message_thread_view(request, message_id):
-    # Fetch the parent message with sender and receiver in one query
-    message = get_object_or_404(
-        Message.objects.select_related('sender', 'receiver').prefetch_related('replies__sender', 'replies__receiver'),
+    # Get root message
+    root_message = get_object_or_404(
+        Message.objects.select_related('sender', 'receiver'),
         id=message_id,
         parent_message__isnull=True
     )
 
-    # Recursively fetch replies
-    def get_thread(msg):
-        return {
-            'message': msg,
-            'replies': [get_thread(reply) for reply in msg.replies.all()]
-        }
+    # Recursive function using Message.objects.filter
+    def fetch_replies(message):
+        replies = Message.objects.filter(parent_message=message).select_related('sender', 'receiver')
+        return [
+            {
+                'message': reply,
+                'replies': fetch_replies(reply)
+            }
+            for reply in replies
+        ]
 
-    thread = get_thread(message)
+    thread = {
+        'message': root_message,
+        'replies': fetch_replies(root_message)
+    }
 
 
 @login_required
