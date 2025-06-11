@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .managers import UnreadMessagesManager
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
@@ -27,6 +28,9 @@ class Message(models.Model):
                     'message': reply,
                     'replies': collect_replies(reply)
                 })
+    objects = models.Manager()
+    unread = UnreadMessagesManager()
+
             return thread
         return collect_replies(self)
 
