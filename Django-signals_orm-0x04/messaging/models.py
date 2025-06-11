@@ -48,3 +48,7 @@ class Notification(models.Model):
     def __str__(self):
         return f'Notification for {self.user} about Message ID {self.message.id}'
 
+
+class UnreadMessagesManager(models.Manager):
+    def for_user(self, user):
+        return self.filter(receiver=user, read=False).only('id', 'sender', 'content', 'timestamp')
