@@ -7,9 +7,28 @@ class Message(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     edited = models.BooleanField(default=False)
+    parent_message = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='replies'
+    )
 
     def __str__(self):
-        return f'Message {self.id} from {self.sender} to {self.receiver}'
+        return f"Message {self.id} from {self.sender} to {self.receiver}"
+
+    def get_thread(self):
+        """ Recursively fetch all replies in a threaded format. """
+        def collect_replies(message):
+            thread = []
+            for reply in message.replies.all():
+                thread.append({
+                    'message': reply,
+                    'replies': collect_replies(reply)
+                })
+            return thread
+        return collect_replies(self)
 
 class MessageHistory(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='history')
