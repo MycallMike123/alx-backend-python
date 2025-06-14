@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from messaging.models import Message
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
@@ -65,3 +66,15 @@ def unread_messages_view(request):
     unread_messages = Message.unread.unread_for_user(request.user)  # Message.unread.unread_for_user
     unread_messages = unread_messages.only('id', 'sender', 'content', 'timestamp')  # .only
     return render(request, 'messaging/unread_inbox.html', {'messages': unread_messages})
+
+
+@cache_page(60)  # Cache for 60 seconds
+@login_required
+def conversation_view(request, user_id):
+    messages = Message.objects.filter(
+        sender=request.user, receiver__id=user_id
+    ) | Message.objects.filter(
+        sender__id=user_id, receiver=request.user
+    )
+    messages = messages.order_by('timestamp')
+    return render(request, 'messaging/conversation.html', {'messages': messages})
