@@ -61,5 +61,7 @@ def send_message(request):
 
 @login_required
 def unread_messages_view(request):
-    unread_messages = Message.unread.for_user(request.user)
+    # Uses custom manager and .only() to retrieve specific fields
+    unread_messages = Message.unread.unread_for_user(request.user)  # Message.unread.unread_for_user
+    unread_messages = unread_messages.only('id', 'sender', 'content', 'timestamp')  # .only
     return render(request, 'messaging/unread_inbox.html', {'messages': unread_messages})
